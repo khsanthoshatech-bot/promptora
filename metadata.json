@@ -1,0 +1,6 @@
+{
+  "name": "AI API Gateway SaaS",
+  "description": "A complete API gateway for AI models with billing, authentication, and analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

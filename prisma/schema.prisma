@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String   @unique
+  wallet    Float    @default(0.0) // Balance in USD or credits
+  role      String   @default("user") // "user" or "admin"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  apiKeys   ApiKey[]
+  requests  ApiRequest[]
+  payments  Payment[]
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  keyHash   String   @unique
+  name      String
+  prefix    String   // to identify keys visually, e.g., sk-...last4
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  revokedAt DateTime?
+
+  requests  ApiRequest[]
+}
+
+model ApiRequest {
+  id         String   @id @default(uuid())
+  apiKeyId   String?
+  apiKey     ApiKey?  @relation(fields: [apiKeyId], references: [id])
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  model      String
+  tokensUsed Int
+  cost       Float
+  status     Int      // HTTP status code
+  createdAt  DateTime @default(now())
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  paymentId     String?  // from Razorpay
+  orderId       String?
+  amount        Float
+  currency      String   @default("USD")
+  status        String   @default("pending") // pending, completed, failed
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
