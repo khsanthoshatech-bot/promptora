@@ -40,8 +40,9 @@ async function startServer() {
       });
 
       const premiumUsers = [
-        'khsanthosha.plans@gmail.com'
-      ];
+  'khsanthu678@gmail.com',
+  'khsanthosha.plans@gmail.com'
+];
 
       const startingWallet = premiumUsers.includes(email)
         ? 100
