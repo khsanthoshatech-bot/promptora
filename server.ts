@@ -152,11 +152,30 @@ async function startServer() {
       }
       const rawKey = authHeader.split(' ')[1];
 
+      console.log('====================');
+      console.log('AUTH HEADER:', authHeader);
+      console.log('RAW KEY:', rawKey);
+      console.log('FIRST 12:', rawKey?.slice(0, 12));
+      console.log('====================');
+
       // Very rudimentary lookup, in production you'd use a faster cache (Redis)
       const allKeys = await prisma.apiKey.findMany({ include: { user: true } });
+      
+      console.log('TOTAL KEYS:', allKeys.length);
+
       let matchedKey = null;
+
       for (const k of allKeys) {
-        if (await bcrypt.compare(rawKey, k.keyHash)) {
+        const ok = await bcrypt.compare(rawKey, k.keyHash);
+
+        console.log(
+          'CHECK',
+          k.prefix,
+          '=>',
+          ok
+        );
+
+        if (ok) {
           matchedKey = k;
           break;
         }
