@@ -35,26 +35,33 @@ async function startServer() {
         });
       }
 
+      const premiumUsers = [
+        'khsanthu678@gmail.com',
+        'khsanthosha.plans@gmail.com',
+        'yournewgmail@gmail.com'
+      ];
+
       let user = await prisma.user.findUnique({
         where: { clerkId }
       });
-
-      const premiumUsers = [
-  'khsanthu678@gmail.com',
-  'khsanthosha.plans@gmail.com'
-  'jyothikasuresh74@gmail.com'
-];
-
-      const startingWallet = premiumUsers.includes(email)
-        ? 100
-        : 5;
 
       if (!user) {
         user = await prisma.user.create({
           data: {
             clerkId,
             email,
-            wallet: startingWallet
+            wallet: premiumUsers.includes(email) ? 100 : 5
+          }
+        });
+      } else if (
+        premiumUsers.includes(email) &&
+        user.wallet < 100
+      ) {
+        // Retroactively upgrade users who were added to premium list after account creation
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            wallet: 100
           }
         });
       }
