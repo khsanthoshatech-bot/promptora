@@ -42,6 +42,7 @@ async function startServer() {
       const premiumUsers = [
   'khsanthu678@gmail.com',
   'khsanthosha.plans@gmail.com'
+  'jyothikasuresh74@gmail.com'
 ];
 
       const startingWallet = premiumUsers.includes(email)
