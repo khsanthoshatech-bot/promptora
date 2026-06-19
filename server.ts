@@ -38,7 +38,7 @@ async function startServer() {
       const premiumUsers = [
         'khsanthu678@gmail.com',
         'khsanthosha.plans@gmail.com',
-        'yournewgmail@gmail.com'
+        'jyothikasuresh74@gmail.com'
       ];
 
       let user = await prisma.user.findUnique({
